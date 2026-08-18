@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syrexs.mc | Bot Dashboard & Yönetim</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0d0d0f; color: #e0e0e0; line-height: 1.6; }
+        
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 60px; background-color: #121215; border-bottom: 1px solid #1f1f23; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 1.3rem; font-weight: bold; color: #f39c12; display: flex; align-items: center; gap: 10px; }
+        .logo span { background: #f39c12; color: #121212; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 800; }
+        nav { display: flex; align-items: center; gap: 30px; }
+        nav a { text-decoration: none; color: #a0a0a0; font-weight: 600; font-size: 0.95rem; transition: color 0.2s; }
+        nav a:hover { color: #ffffff; }
+        
+        .login-btn { background-color: #f39c12; color: #121212 !important; padding: 8px 18px; border-radius: 6px; font-weight: 700 !important; display: inline-flex; align-items: center; gap: 8px; transition: background-color 0.2s; text-decoration: none; }
+        .login-btn:hover { background-color: #d68910; }
+        
+        .logout-btn { background-color: #ef4444; color: #ffffff !important; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem; font-weight: bold; text-decoration: none; }
+        
+        .user-box { display: flex; align-items: center; gap: 10px; background: #1c1c21; padding: 5px 12px; border-radius: 8px; border: 1px solid #2b2b33; }
+        .user-box img { width: 32px; height: 32px; border-radius: 50%; }
+        .user-box span { color: #fff; font-weight: 600; font-size: 0.9rem; }
+
+        .hero { display: flex; align-items: center; justify-content: space-between; padding: 80px 60px; max-width: 1200px; margin: 0 auto; gap: 40px; min-height: 75vh; background: radial-gradient(circle at 20% 30%, rgba(243, 156, 18, 0.08) 0%, transparent 50%); }
+        .hero-content { flex: 1; }
+        .hero-tag { background: rgba(243, 156, 18, 0.1); color: #f39c12; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; font-weight: 700; display: inline-block; margin-bottom: 20px; border: 1px solid rgba(243, 156, 18, 0.3); }
+        .hero-content h1 { font-size: 3.2rem; color: #ffffff; margin-bottom: 20px; font-weight: 800; line-height: 1.2; }
+        .hero-content h1 span { color: #f39c12; }
+        .hero-content p { font-size: 1.1rem; color: #a0a0a0; margin-bottom: 30px; }
+        
+        .hero-buttons { display: flex; gap: 15px; }
+        .btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: transform 0.1s, background-color 0.2s; }
+        .btn.primary { background-color: #f39c12; color: #121212; }
+        .btn.primary:hover { background-color: #d68910; }
+        .btn.secondary { background-color: #1a1a1e; color: #ffffff; border: 1px solid #2a2a30; }
+        .btn.secondary:hover { background-color: #24242a; }
+
+        .hero-preview { flex: 1; display: flex; justify-content: center; }
+        .ticket-card { background-color: #161619; border: 1px solid #222228; border-radius: 12px; width: 100%; max-width: 420px; padding: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+        .ticket-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #222228; padding-bottom: 12px; }
+        .ticket-title { font-weight: 700; color: #ffffff; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; }
+        .ticket-badge { background: #f39c12; color: #121212; font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .ticket-body p { color: #a1a1aa; font-size: 0.9rem; margin-bottom: 15px; }
+        .ticket-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .t-btn { background: #222228; color: #f4f4f5; border: none; padding: 10px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; text-align: center; transition: background 0.2s; }
+        .t-btn:hover { background: #2e2e36; }
+        .t-btn.active { background: #f39c12; color: #121212; }
+
+        .dashboard-section { padding: 80px 20px; background-color: #111114; text-align: center; border-top: 1px solid #1f1f23; border-bottom: 1px solid #1f1f23; }
+        .dashboard-section h2 { font-size: 2.2rem; margin-bottom: 10px; color: #ffffff; font-weight: 700; }
+        .dashboard-section > p { color: #a0a0a0; margin-bottom: 40px; }
+        .dashboard-container { max-width: 1000px; margin: 0 auto; background: #161619; border: 1px solid #222228; border-radius: 12px; padding: 30px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+        .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222228; padding-bottom: 20px; margin-bottom: 20px; }
+        .dash-server-info { display: flex; align-items: center; gap: 15px; }
+        .dash-server-avatar { width: 50px; height: 50px; background: #f39c12; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold; color: #121212; }
+        .dash-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card { background: #1c1c21; padding: 20px; border-radius: 8px; border: 1px solid #2b2b33; }
+        .stat-card h4 { color: #a0a0a0; font-size: 0.9rem; margin-bottom: 5px; }
+        .stat-card p { color: #ffffff; font-size: 1.4rem; font-weight: bold; }
+        .dash-settings { display: flex; flex-direction: column; gap: 15px; }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; background: #1c1c21; padding: 15px 20px; border-radius: 8px; border: 1px solid #2b2b33; }
+        .setting-row span { font-weight: 600; color: #fff; }
+        .switch-btn { background: #22c55e; color: white; padding: 6px 14px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; border: none; }
+
+        .commands { padding: 80px 20px; text-align: center; }
+        .commands h2 { font-size: 2.2rem; margin-bottom: 40px; color: #ffffff; font-weight: 700; }
+        .command-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1100px; margin: 0 auto; }
+        .command-card { background-color: #161619; padding: 30px; border-radius: 10px; border: 1px solid #222228; text-align: left; }
+        .command-card h3 { color: #f39c12; margin-bottom: 12px; font-family: monospace; font-size: 1.3rem; }
+        .command-card p { color: #a0a0a0; font-size: 0.95rem; }
+
+        .support { padding: 80px 20px; text-align: center; background-color: #111114; border-top: 1px solid #1f1f23; }
+        .support h2 { font-size: 2.2rem; margin-bottom: 15px; color: #ffffff; }
+        .support p { color: #a0a0a0; margin-bottom: 30px; font-size: 1.05rem; }
+        .discord-btn { background-color: #f39c12; color: #121212; }
+        .discord-btn:hover { background-color: #d68910; }
+
+        footer { text-align: center; padding: 25px; background-color: #09090b; color: #666; border-top: 1px solid #19191d; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><i class="fa-solid fa-crown"></i> SYREXS.MC <span>APP</span></div>
+        <nav>
+            <a href="#anasayfa">Ana Sayfa</a>
+            <a href="#dashboard">Dashboard</a>
+            <a href="#komutlar">Özellikler</a>
+            
+            <% if (user) { %>
+                <div class="user-box">
+                    <% if (user.avatar) { %>
+                        <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
+                    <% } %>
+                    <span><%= user.username %></span>
+                </div>
+                <a href="/logout" class="logout-btn">Çıkış</a>
+            <% } else { %>
+                <a href="/login" class="login-btn"><i class="fa-brands fa-discord"></i> Oturum Aç & Ekle</a>
+            <% } %>
+        </nav>
+    </header>
+
+    <section id="anasayfa" class="hero">
+        <div class="hero-content">
+            <div class="hero-tag"><i class="fa-solid fa-bolt"></i> Yeni Nesil Minecraft & Discord Botu</div>
+            <h1>Sunucunuzun İhtiyaç Duyacağı <span>En İyi Bot.</span></h1>
+            <p>Binlerce topluluk tarafından güvenilen; gelişmiş bilet sistemi, moderasyon araçları ve tamamen özelleştirilebilir panelleriyle sunucu yönetimini kolaylaştırın.</p>
+            <div class="hero-buttons">
+                <a href="/login" class="btn primary"><i class="fa-brands fa-discord"></i> Botu Sunucuya Ekle</a>
+                <a href="#dashboard" class="btn secondary"><i class="fa-solid fa-sliders"></i> Paneli İncele</a>
+            </div>
+        </div>
+
+        <div class="hero-preview">
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    <div class="ticket-title"><i class="fa-solid fa-ticket"></i> Syrexs Bot</div>
+                    <div class="ticket-badge">UYGULAMA</div>
+                </div>
+                <div class="ticket-body">
+                    <p style="font-weight: bold; color: #fff; margin-bottom: 5px;">Syrexs Bot Destek Sistemi</p>
+                    <p>Lütfen talep türünüzle karşılık gelen düğmeye tıklayın.</p>
+                </div>
+                <div class="ticket-buttons">
+                    <button class="t-btn active">Genel Soru</button>
+                    <button class="t-btn">Yetkili Başvuru</button>
+                    <button class="t-btn">Bug Raporu</button>
+                    <button class="t-btn">Öneri</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="dashboard-section">
+        <h2>Sunucu Yönetim Paneli</h2>
+        <p>Botu sunucuna ekledikten sonra tüm ayarları bu arayüzden yönetebilirsin.</p>
+        <div class="dashboard-container">
+            <div class="dash-header">
+                <div class="dash-server-info">
+                    <div class="dash-server-avatar">S</div>
+                    <div>
+                        <h3 style="color: #fff; font-size: 1.2rem;">Syrexs.mc Topluluk Sunucusu</h3>
+                        <p style="color: #a0a0a0; font-size: 0.85rem;">Durum: <span style="color: #22c55e; font-weight: bold;">● Aktif</span></p>
+                    </div>
+                </div>
+                <a href="/login" class="btn primary" style="padding: 10px 18px; font-size: 0.9rem;"><i class="fa-brands fa-discord"></i> Yönetimi Aç</a>
+            </div>
+            <div class="dash-stats">
+                <div class="stat-card"><h4>Aktif Biletler</h4><p>0</p></div>
+                <div class="stat-card"><h4>Komut Kullanımı</h4><p>1,428</p></div>
+                <div class="stat-card"><h4>Bot Ping</h4><p>24 ms</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section id="komutlar" class="commands">
+        <h2>Güçlü Komutlar & Özellikler</h2>
+        <div class="command-grid">
+            <div class="command-card"><h3>!panel / !kk</h3><p>Destek talebi panelini gönderir.</p></div>
+            <div class="command-card"><h3>!ban / !kick</h3><p>Hızlı ve güvenli moderasyon işlemleri.</p></div>
+            <div class="command-card"><h3>!yardım</h3><p>Tüm komutları listeleyen rehber.</p></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Syrexs.mc - Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        const ticketButtons = document.querySelectorAll('.ticket-buttons .t-btn');
+        ticketButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                ticketButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
