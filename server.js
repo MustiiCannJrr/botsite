@@ -107,4 +107,4 @@ app.post('/update-config', (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Sunucu ${PORT} portunda ayakta!`));
+module.exports = app;
